@@ -16,29 +16,5 @@ abstract class IRouterAbstract {
 
   /// 根据自定义路由FlutterRouter
   /// 组装成GoRoute
-  GoRouter generateRoutes() {
-    List<GoRoute> routes = [];
-
-    final initRoute =
-        this.routes.where((route) => route.isDefault).firstOrNull ??
-            this.routes.firstOrNull;
-
-    for (var item in this.routes) {
-      final route = GoRoute(
-        name: item.name,
-        path: item.path,
-        builder: item.builder,
-      );
-
-      routes.add(route);
-    }
-
-    final router = GoRouter(
-      initialLocation: initRoute?.path,
-      routes: routes,
-      navigatorKey: navigatorKey,
-      observers: observers,
-    );
-    return router;
-  }
+  GoRouter generateRoutes();
 }

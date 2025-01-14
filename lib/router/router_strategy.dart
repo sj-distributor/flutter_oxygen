@@ -4,6 +4,8 @@
  * @Date: 2024-07-31 18:42:54
  */
 
+import 'package:go_router/go_router.dart';
+
 import 'flutter_router.dart';
 import 'router_enum.dart';
 import 'router_abstract.dart';
@@ -25,6 +27,8 @@ class RouteStrategy extends IRouterAbstract {
 
   late DeviceTypeEnum deviceType;
 
+  FlutterRouter? initRoute;
+
   /// 初始化
   static RouteStrategy init({
     required DeviceTypeEnum deviceType,
@@ -37,6 +41,35 @@ class RouteStrategy extends IRouterAbstract {
     _instance.routes = getRoutes();
 
     return _instance;
+  }
+
+  /// 根据自定义路由FlutterRouter
+  /// 组装成GoRoute
+  @override
+  GoRouter generateRoutes() {
+    List<GoRoute> routes = [];
+
+    initRoute = initRoute ??
+        this.routes.where((route) => route.isDefault).firstOrNull ??
+        this.routes.firstOrNull;
+
+    for (var item in this.routes) {
+      final route = GoRoute(
+        name: item.name,
+        path: item.path,
+        builder: item.builder,
+      );
+
+      routes.add(route);
+    }
+
+    final router = GoRouter(
+      initialLocation: initRoute?.path,
+      routes: routes,
+      navigatorKey: navigatorKey,
+      observers: observers,
+    );
+    return router;
   }
 
   /// 获取路由
