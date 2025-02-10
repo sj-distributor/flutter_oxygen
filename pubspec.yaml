@@ -12,11 +12,17 @@ dependencies:
     sdk: flutter
   go_router: ^14.6.3
   json_annotation: ^4.9.0
+  recase: ^4.1.0
+  yaml_edit: ^2.2.1
+  yaml: ^3.1.2
+  xml: ^6.5.0
+  mustache_template: ^2.0.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^5.0.0
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
