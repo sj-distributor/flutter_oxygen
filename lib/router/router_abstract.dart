@@ -12,7 +12,7 @@ import 'route.dart';
 abstract class IRouterAbstract {
   late List<FlutterRouter> routes;
   late List<NavigatorObserver>? observers = [];
-  late GlobalKey<NavigatorState>? navigatorKey;
+  GlobalKey<NavigatorState>? navigatorKey;
 
   /// 根据自定义路由FlutterRouter
   /// 组装成GoRoute
