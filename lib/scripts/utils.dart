@@ -5,6 +5,8 @@
  */
 import 'dart:io';
 
+const _print = print;
+
 class Utils {
   /// 递归创建文件夹
   static String checkAndCreateDirectory(String path) {
@@ -17,9 +19,64 @@ class Utils {
     return path;
   }
 
+  /// 删除文件
+  static Future<void> deleteFile(String filePath) async {
+    final file = File(filePath);
+
+    if (file.existsSync()) file.deleteSync();
+  }
+
   /// 删除文件夹
-  static void deleteDirectory(String path) {
+  static Future<void> deleteDirectory(String path) async {
     final directory = Directory(path);
     if (directory.existsSync()) directory.deleteSync(recursive: true);
+  }
+
+  /// 获取静态变量的值
+  static String? getStaticMpa(String? content, String key) {
+    if (content == null) return null;
+    final regex = RegExp(r'static (\w+) (\w+) = (.*?);');
+    final matches = regex.allMatches(content);
+
+    for (var match in matches) {
+      final variable = match.group(2);
+      final value = match.group(3);
+
+      if (variable == key) {
+        if (value!.startsWith('"') && value.endsWith('"')) {
+          return value.substring(1, value.length - 1);
+        } else if (value.startsWith("'") && value.endsWith("'")) {
+          return value.substring(1, value.length - 1);
+        }
+        return value;
+      }
+    }
+    return null;
+  }
+
+  /// 复制文件
+  static Future<void> copyFiles({
+    required String inputDir,
+    required String outputDir,
+  }) async {
+    final inputDirectory = Directory(inputDir);
+    final outputDirectory = Directory(outputDir);
+
+    if (!await inputDirectory.exists()) {
+      _print('copy files input directory does not exist');
+      return;
+    }
+
+    if (!await outputDirectory.exists()) {
+      await outputDirectory.create(recursive: true);
+    }
+
+    await for (var entity in inputDirectory.list(recursive: false)) {
+      if (entity is File) {
+        final newPath =
+            '${outputDirectory.path}/${entity.uri.pathSegments.last}';
+        await entity.copy(newPath);
+      }
+    }
   }
 }
