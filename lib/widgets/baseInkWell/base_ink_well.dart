@@ -65,7 +65,7 @@ class BaseInkWell extends StatelessWidget {
   final double? radius;
   final BorderRadius? borderRadius;
   final ShapeBorder? customBorder;
-  final bool? enableFeedback;
+  final bool enableFeedback;
   final bool excludeFromSemantics;
   final FocusNode? focusNode;
   final bool canRequestFocus;
