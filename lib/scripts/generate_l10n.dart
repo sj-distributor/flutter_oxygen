@@ -52,37 +52,6 @@ void generatel10n() {
   });
   jsonFile.exists();
 
-  /// lib/extensions/build_context_extension.dart
-  const buildContextTplPath =
-      "lib/extensions/build_context_extension_template.dart";
-  final buildContextTplFile = File(buildContextTplPath);
-  if (!buildContextTplFile.existsSync()) {
-    // ignore: avoid_print
-    print("$buildContextTplPath not found");
-    return;
-  }
-
-  String buildContextTplFileContent = buildContextTplFile.readAsStringSync();
-
-  final exp = RegExp(r"\{.+\}");
-  final keys = jsonData.keys
-      .where((key) => !exp.hasMatch(jsonData[key]["en"]))
-      .map((e) => "\"$e\": locale.$e")
-      .join(",\n        ");
-
-  const annotation = "/// 文件由`make l10n`命令生成，请勿手动修改\n";
-  final buildContextFileContent = buildContextTplFileContent.replaceAll(
-    RegExp(r"/\*localeMap\*/"),
-    keys,
-  );
-  const buildContextPath = "lib/extensions/build_context_extension.dart";
-  final buildContextFile = File(buildContextPath);
-  if (!buildContextFile.existsSync()) {
-    buildContextFile.createSync();
-  }
-  buildContextFile.writeAsStringSync("$annotation$buildContextFileContent");
-  buildContextFile.exists();
-
   // ignore: avoid_print
   print("output success");
 }
