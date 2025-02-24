@@ -7,23 +7,35 @@ import 'dart:convert';
 import 'dart:io';
 
 /// 根据lib/common/l10n/language.json生成国际化配置文件
-void generatel10n() {
+void generateL10n() {
   // 读取JSON文件
   String path = "lib/common/l10n";
-  String inputPath = "$path/language.json";
+  String languageJson = "$path/language.json";
 
-  File jsonFile = File(inputPath);
-  if (!jsonFile.existsSync()) {
+  File languageFile = File(languageJson);
+  if (!languageFile.existsSync()) {
     // ignore: avoid_print
-    print("$inputPath not found");
+    print("$languageJson not found");
     return;
   }
 
-  // 读取JSON文件内容
-  String jsonContent = jsonFile.readAsStringSync();
+  // 解析 language.json
+  Map<String, dynamic> languageData =
+      json.decode(languageFile.readAsStringSync());
+
+  /// meta_seo.json
+  String metaSeoJson = "$path/meta_seo.json";
+  File metaSeoFile = File(metaSeoJson);
+
+  /// 解析 meta_seo.json
+  Map<String, dynamic> metaSeoData = {};
+
+  if (metaSeoFile.existsSync()) {
+    metaSeoData = json.decode(metaSeoFile.readAsStringSync());
+  }
 
   // 解析JSON内容
-  Map<String, dynamic> jsonData = json.decode(jsonContent);
+  Map<String, dynamic> jsonData = {...languageData, ...metaSeoData};
 
   // 遍历JSON数据的每个键值对
   jsonData.forEach((key, value) {
@@ -50,12 +62,11 @@ void generatel10n() {
       file.exists();
     });
   });
-  jsonFile.exists();
 
   // ignore: avoid_print
   print("output success");
 }
 
 void main() {
-  generatel10n();
+  generateL10n();
 }

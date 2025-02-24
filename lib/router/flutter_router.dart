@@ -24,6 +24,12 @@ class FlutterRouter {
   /// 页面标题
   final String? title;
 
+  /// 页面关键字
+  final String? keywords;
+
+  /// 页面描述
+  final String? description;
+
   /// 窗口宽度
   final double width;
 
@@ -62,6 +68,8 @@ class FlutterRouter {
   /// path：路由路径\
   /// builder：页面\
   /// title：页面标题\
+  /// keywords：页面关键字\
+  /// description：页面描述\
   /// width：窗口宽度 640\
   /// height：窗口高度 640\
   /// isDefault：是否默认路由 false\
@@ -78,6 +86,8 @@ class FlutterRouter {
     required this.path,
     this.builder,
     this.title,
+    this.keywords,
+    this.description,
     this.width = 960,
     this.height = 640,
     this.isDefault = false,
