@@ -95,6 +95,28 @@ class BuildCli {
     await file.writeAsString(document.toXmlString(pretty: true, indent: '  '));
   }
 
+  /// Replaces the bundle identifier in the given file.
+  Future<void> replaceBundleIdentifier({
+    required String filePath,
+    required String newIdentifier,
+  }) async {
+    final content = await File(filePath).readAsString();
+
+    // 改进后的正则表达式
+    final pattern = RegExp(
+      r'(PRODUCT_BUNDLE_IDENTIFIER = )([\w.]+?)(\.RunnerTests)?;',
+      dotAll: true,
+    );
+
+    final newContent = content.replaceAllMapped(pattern, (match) {
+      final prefix = match.group(1)!; // "PRODUCT_BUNDLE_IDENTIFIER = "
+      final suffix = match.group(3); // 可能存在的 ".RunnerTests"
+      return '$prefix$newIdentifier${suffix ?? ""};'; // 保留后缀
+    });
+
+    await File(filePath).writeAsString(newContent);
+  }
+
   /// 生成android文件
   bool android({
     required Map<String, dynamic> data,
