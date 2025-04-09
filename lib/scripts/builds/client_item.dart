@@ -18,6 +18,7 @@ class ClientItem {
     required this.version,
     // required this.namespace,
     required this.password,
+    required this.merchantId,
     this.defaultLanguage = 'zh',
     this.primaryColor = '#1677FF',
     this.env = 'dev',
@@ -48,6 +49,9 @@ class ClientItem {
   /// 密钥密码 \
   /// 用于App证书签名的密码，全部使用该密码
   final String password;
+
+  /// 商户id
+  final String merchantId;
 
   /// 默认语言
   final String defaultLanguage;
