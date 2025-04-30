@@ -117,6 +117,15 @@ class BuildCli {
     await File(filePath).writeAsString(newContent);
   }
 
+  /// 生成web文件
+  bool web({
+    required Map<String, dynamic> data,
+    required String template,
+    required String output,
+  }) {
+    return generate(data: data, template: template, output: output);
+  }
+
   /// 生成android文件
   bool android({
     required Map<String, dynamic> data,
@@ -145,10 +154,12 @@ class BuildCli {
 
     data["buildTypes"] = {
       "name": isDev ? "debug" : "release",
-      "minifyEnabled": false,
-      "shrinkResources": false,
-      "resValue": '"string", "app_name", "${data["appName"]}"',
-      "signingConfig": !isDev ? "signingConfigs.$env" : "signingConfigs.debug",
+      "isMinifyEnabled": false,
+      "isShrinkResources": false,
+      "resValue": 'resValue("string", "app_name", "${data["appName"]}")',
+      "signingConfig": !isDev
+          ? 'signingConfigs.getByName("$env")'
+          : 'signingConfigs.getByName("debug")',
     };
 
     //  flavor

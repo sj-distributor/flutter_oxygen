@@ -1,22 +1,23 @@
 plugins {
-    id "com.android.application"
-    id "kotlin-android"
+    id("com.android.application")
+    id("kotlin-android")
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
-    id "dev.flutter.flutter-gradle-plugin"
+    id("dev.flutter.flutter-gradle-plugin")
 }
 
 android {
-    namespace = "com.oxygen.white_label"
+    namespace = "com.example.rfOnline.white_label"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
+    // ndkVersion = flutter.ndkVersion
+    ndkVersion = "29.0.13113456"
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
 
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_1_8
+        jvmTarget = JavaVersion.VERSION_11.toString()
     }
 
     defaultConfig {
@@ -28,7 +29,7 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
-        resValue "string", "application_name", "{{appName}}"
+        resValue("string", "application_name", "{{appName}}")
     }
 
     signingConfigs {
@@ -48,10 +49,10 @@ android {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
             // signingConfig = signingConfigs.debug
-            minifyEnabled {{minifyEnabled}}
-            shrinkResources {{shrinkResources}}
-            resValue {{resValue}}
-            signingConfig {{signingConfig}}
+            isMinifyEnabled = {{isMinifyEnabled}}
+            isShrinkResources = {{isShrinkResources}}
+            {{resValue}}
+            signingConfig = {{signingConfig}}
         }
       {{/buildTypes}}
     }
