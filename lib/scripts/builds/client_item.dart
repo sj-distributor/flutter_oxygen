@@ -16,6 +16,7 @@ class ClientItem {
     required this.appName,
     required this.apiUrl,
     required this.version,
+    required this.stripeKey,
     // required this.namespace,
     required this.password,
     required this.merchantId,
@@ -61,6 +62,9 @@ class ClientItem {
 
   /// 环境
   final String env;
+
+  /// stripe key
+  final String stripeKey;
 
   factory ClientItem.fromJson(Map<String, dynamic> json) =>
       _$ClientItemFromJson(json);
