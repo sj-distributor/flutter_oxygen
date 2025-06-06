@@ -21,6 +21,7 @@ class ClientItem {
     required this.merchantId,
     this.defaultLanguage = 'zh',
     this.primaryColor = '#1677FF',
+    this.stripeKey = 'pk_test_ENUE4XDaaKczydhLqLXFZKJA00Ryk3ofDB',
     this.env = 'dev',
   });
 
@@ -61,6 +62,9 @@ class ClientItem {
 
   /// 环境
   final String env;
+
+  /// stripe key
+  final String stripeKey;
 
   factory ClientItem.fromJson(Map<String, dynamic> json) =>
       _$ClientItemFromJson(json);
