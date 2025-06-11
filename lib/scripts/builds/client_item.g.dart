@@ -12,6 +12,7 @@ ClientItem _$ClientItemFromJson(Map<String, dynamic> json) => ClientItem(
       appName: json['appName'] as String,
       apiUrl: json['apiUrl'] as String,
       version: json['version'] as String,
+      stripeKey: json['stripeKey'] as String,
       password: json['password'] as String,
       merchantId: json['merchantId'] as String,
       defaultLanguage: json['defaultLanguage'] as String? ?? 'zh',
@@ -31,4 +32,5 @@ Map<String, dynamic> _$ClientItemToJson(ClientItem instance) =>
       'defaultLanguage': instance.defaultLanguage,
       'primaryColor': instance.primaryColor,
       'env': instance.env,
+      'stripeKey': instance.stripeKey,
     };
