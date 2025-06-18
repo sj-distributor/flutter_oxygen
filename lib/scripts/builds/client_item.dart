@@ -19,6 +19,7 @@ class ClientItem {
     required this.stripeKey,
     required this.imApiKey,
     required this.imBaseUrl,
+    required this.imWebUrl,
     // required this.namespace,
     required this.password,
     required this.merchantId,
@@ -73,6 +74,9 @@ class ClientItem {
 
   /// im base url
   final String imBaseUrl;
+
+  /// im web url
+  final String imWebUrl;
 
   factory ClientItem.fromJson(Map<String, dynamic> json) =>
       _$ClientItemFromJson(json);
