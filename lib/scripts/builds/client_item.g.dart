@@ -15,6 +15,7 @@ ClientItem _$ClientItemFromJson(Map<String, dynamic> json) => ClientItem(
       stripeKey: json['stripeKey'] as String,
       imApiKey: json['imApiKey'] as String,
       imBaseUrl: json['imBaseUrl'] as String,
+      imWebUrl: json['imWebUrl'] as String,
       password: json['password'] as String,
       merchantId: json['merchantId'] as String,
       defaultLanguage: json['defaultLanguage'] as String? ?? 'zh',
@@ -37,4 +38,5 @@ Map<String, dynamic> _$ClientItemToJson(ClientItem instance) =>
       'stripeKey': instance.stripeKey,
       'imApiKey': instance.imApiKey,
       'imBaseUrl': instance.imBaseUrl,
+      'imWebUrl': instance.imWebUrl,
     };
