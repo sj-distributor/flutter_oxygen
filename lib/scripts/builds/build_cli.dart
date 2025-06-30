@@ -144,7 +144,7 @@ class BuildCli {
       "name": env,
       "keyAlias": data["namespace"],
       "keyPassword": data["password"],
-      "storeFile": "../${projectName}_$env.jks",
+      "storeFile": "../jks/${projectName}_$env.jks",
       "storePassword": data["password"]
     };
 
