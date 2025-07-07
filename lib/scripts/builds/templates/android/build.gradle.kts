@@ -14,6 +14,7 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
+        isCoreLibraryDesugaringEnabled = true
     }
 
     kotlinOptions {
@@ -64,6 +65,6 @@ flutter {
 
 dependencies {
     {{#dependencies}}
-    {{name}} '{{value}}'
+    {{name}}("{{value}}")
     {{/dependencies}}
 }
