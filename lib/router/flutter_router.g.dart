@@ -24,6 +24,10 @@ FlutterRouter _$FlutterRouterFromJson(Map<String, dynamic> json) =>
       auth: json['auth'] as bool? ?? false,
       subWindow: json['subWindow'] as bool? ?? false,
       hideTitleBar: json['hideTitleBar'] as bool? ?? false,
+      isShell: json['isShell'] as bool? ?? false,
+      routes: (json['routes'] as List<dynamic>?)
+          ?.map((e) => FlutterRouter.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$FlutterRouterToJson(FlutterRouter instance) =>
@@ -44,4 +48,6 @@ Map<String, dynamic> _$FlutterRouterToJson(FlutterRouter instance) =>
       'auth': instance.auth,
       'subWindow': instance.subWindow,
       'hideTitleBar': instance.hideTitleBar,
+      'isShell': instance.isShell,
+      'routes': instance.routes?.map((e) => e.toJson()).toList(),
     };

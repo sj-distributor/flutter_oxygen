@@ -4,6 +4,7 @@
  * @Date: 2024-07-31 18:42:54
  */
 
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import 'flutter_router.dart';
@@ -13,6 +14,7 @@ import 'router_abstract.dart';
 /// 路由策略
 /// phone端、iPad端、pc端
 /// 暂时废弃
+
 class RouteStrategy extends IRouterAbstract {
   // 私有构造函数
   RouteStrategy._internal();
@@ -47,29 +49,42 @@ class RouteStrategy extends IRouterAbstract {
   /// 组装成GoRoute
   @override
   GoRouter generateRoutes() {
-    List<GoRoute> routes = [];
-
     initRoute = initRoute ??
-        this.routes.where((route) => route.isDefault).firstOrNull ??
-        this.routes.firstOrNull;
-
-    for (var item in this.routes) {
-      final route = GoRoute(
-        name: item.name,
-        path: item.path,
-        builder: item.builder,
-      );
-
-      routes.add(route);
-    }
+        routes.where((route) => route.isDefault).firstOrNull ??
+        routes.firstOrNull;
 
     final router = GoRouter(
       initialLocation: initRoute?.path,
-      routes: routes,
+      routes: buildRoutes(routes),
       navigatorKey: navigatorKey,
       observers: observers,
     );
     return router;
+  }
+
+  List<RouteBase> buildRoutes(List<FlutterRouter> routers) {
+    return routers.map((router) {
+      if (router.isShell) {
+        // 如果是 ShellRoute（如底部导航结构）
+        return ShellRoute(
+          navigatorKey: GlobalKey<NavigatorState>(),
+          builder: (context, state, child) {
+            return Scaffold(
+              appBar: router.appBar,
+              body: child,
+              bottomNavigationBar: router.bottomNavigationBar,
+            );
+          },
+          routes: buildRoutes(router.routes ?? []), // 递归构建子路由
+        );
+      } else {
+        return GoRoute(
+          name: router.name,
+          path: router.path,
+          builder: router.builder,
+        );
+      }
+    }).toList();
   }
 
   /// 获取路由

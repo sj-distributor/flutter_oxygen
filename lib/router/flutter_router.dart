@@ -63,6 +63,20 @@ class FlutterRouter {
   /// 更改本机窗口的标题栏样式
   final bool hideTitleBar;
 
+  /// 是否是Shell
+  final bool isShell;
+
+  /// 自定义路由
+  final List<FlutterRouter>? routes;
+
+  /// appBar
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  final PreferredSizeWidget? appBar;
+
+  /// 底部导航栏
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  final Widget? bottomNavigationBar;
+
   /// 自定义路由\
   /// name：路由名称\
   /// path：路由路径\
@@ -99,6 +113,10 @@ class FlutterRouter {
     this.auth = false,
     this.subWindow = false,
     this.hideTitleBar = false,
+    this.isShell = false,
+    this.appBar,
+    this.bottomNavigationBar,
+    this.routes,
   });
 
   factory FlutterRouter.fromJson(Map<String, dynamic> json) =>
