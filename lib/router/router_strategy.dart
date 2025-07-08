@@ -31,6 +31,9 @@ class RouteStrategy extends IRouterAbstract {
 
   FlutterRouter? initRoute;
 
+  /// 受保护的路由
+  List<String> protectedPaths = [];
+
   /// 初始化
   static RouteStrategy init({
     required DeviceTypeEnum deviceType,
@@ -41,6 +44,7 @@ class RouteStrategy extends IRouterAbstract {
     }
     _instance.deviceType = deviceType;
     _instance.routes = getRoutes();
+    _instance.protectedPaths = extractAuthPaths(_instance.routes);
 
     return _instance;
   }
@@ -58,16 +62,16 @@ class RouteStrategy extends IRouterAbstract {
       routes: buildRoutes(routes),
       navigatorKey: navigatorKey,
       observers: observers,
+      redirect: redirect,
     );
+
     return router;
   }
 
   List<RouteBase> buildRoutes(List<FlutterRouter> routers) {
     return routers.map((router) {
       if (router.isShell) {
-        // 如果是 ShellRoute（如底部导航结构）
         return ShellRoute(
-          navigatorKey: GlobalKey<NavigatorState>(),
           builder: (context, state, child) {
             return Scaffold(
               appBar: router.appBar,
@@ -75,7 +79,7 @@ class RouteStrategy extends IRouterAbstract {
               bottomNavigationBar: router.bottomNavigationBar,
             );
           },
-          routes: buildRoutes(router.routes ?? []), // 递归构建子路由
+          routes: buildRoutes(router.routes ?? []),
         );
       } else {
         return GoRoute(
@@ -94,5 +98,23 @@ class RouteStrategy extends IRouterAbstract {
     }
 
     return _instance.routeMap[_instance.deviceType]!;
+  }
+
+  static List<String> extractAuthPaths(List<FlutterRouter> routers) {
+    final List<String> result = [];
+
+    void traverse(List<FlutterRouter> items) {
+      for (final route in items) {
+        if (route.auth) {
+          result.add(route.path);
+        }
+        if (route.routes != null && route.routes!.isNotEmpty) {
+          traverse(route.routes!);
+        }
+      }
+    }
+
+    traverse(routers);
+    return result;
   }
 }
