@@ -13,6 +13,7 @@ import 'route.dart';
 
 abstract class IRouterAbstract {
   late List<FlutterRouter> routes;
+  late List<FlutterRouter> allRoutes;
   late List<NavigatorObserver>? observers = [];
   late FutureOr<String?> Function(BuildContext, GoRouterState)? redirect;
   GlobalKey<NavigatorState>? navigatorKey;

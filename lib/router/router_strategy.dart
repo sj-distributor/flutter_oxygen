@@ -31,9 +31,6 @@ class RouteStrategy extends IRouterAbstract {
 
   FlutterRouter? initRoute;
 
-  /// 受保护的路由
-  List<String> protectedPaths = [];
-
   /// 初始化
   static RouteStrategy init({
     required DeviceTypeEnum deviceType,
@@ -44,7 +41,7 @@ class RouteStrategy extends IRouterAbstract {
     }
     _instance.deviceType = deviceType;
     _instance.routes = getRoutes();
-    _instance.protectedPaths = extractAuthPaths(_instance.routes);
+    _instance.allRoutes = extractRoutes(_instance.routes);
 
     return _instance;
   }
@@ -98,6 +95,23 @@ class RouteStrategy extends IRouterAbstract {
     }
 
     return _instance.routeMap[_instance.deviceType]!;
+  }
+
+  /// 获取全部路由
+  static List<FlutterRouter> extractRoutes(List<FlutterRouter> routers) {
+    final List<FlutterRouter> result = [];
+
+    void traverse(List<FlutterRouter> items) {
+      for (final route in items) {
+        result.add(route);
+        if (route.routes != null && route.routes!.isNotEmpty) {
+          traverse(route.routes!);
+        }
+      }
+    }
+
+    traverse(routers);
+    return result;
   }
 
   static List<String> extractAuthPaths(List<FlutterRouter> routers) {
