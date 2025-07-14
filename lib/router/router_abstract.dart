@@ -16,7 +16,7 @@ abstract class IRouterAbstract {
   late List<FlutterRouter> allRoutes;
   late List<NavigatorObserver>? observers = [];
   late FutureOr<String?> Function(BuildContext, GoRouterState)? redirect;
-  late GlobalKey<NavigatorState> navigatorKey;
+  GlobalKey<NavigatorState>? navigatorKey;
 
   /// 根据自定义路由FlutterRouter
   /// 组装成GoRoute
