@@ -5,16 +5,15 @@
  */
 class Params {
   Map<String, String> get(List<String> paramsList) {
-    Map<String, String> paramsMap = {};
+    final Map<String, String> paramsMap = {};
 
-    for (var param in paramsList) {
-      if (param.contains('=')) {
-        var splitParam = param.split('=');
-        if (splitParam.length == 2) {
-          var key = splitParam[0].trim();
-          var value = splitParam[1].trim();
-          paramsMap[key] = value;
-        }
+    for (final param in paramsList) {
+      // 只分割第一个 '='
+      final splitIndex = param.indexOf('=');
+      if (splitIndex != -1) {
+        final key = param.substring(0, splitIndex).trim();
+        final value = param.substring(splitIndex + 1).trim();
+        paramsMap[key] = value;
       }
     }
 
