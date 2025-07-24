@@ -4,8 +4,8 @@ version: 0.0.1
 homepage:
 
 environment:
-  sdk: ">=3.8.0"
-  flutter: ">=3.32.5"
+  sdk: ^3.6.0
+  flutter: ">=1.17.0"
 
 dependencies:
   flutter:
@@ -24,6 +24,7 @@ dev_dependencies:
     sdk: flutter
   flutter_lints: ^5.0.0
   json_serializable: ^6.9.4
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

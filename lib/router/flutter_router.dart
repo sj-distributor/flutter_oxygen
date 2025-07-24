@@ -21,10 +21,6 @@ class FlutterRouter {
   @JsonKey(includeFromJson: false, includeToJson: false)
   final Widget Function(BuildContext, GoRouterState state)? builder;
 
-  /// 页面pageBuilder
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  final Page<dynamic> Function(BuildContext, GoRouterState)? pageBuilder;
-
   /// 页面标题
   final String? title;
 
@@ -103,7 +99,6 @@ class FlutterRouter {
     required this.name,
     required this.path,
     this.builder,
-    this.pageBuilder,
     this.title,
     this.keywords,
     this.description,
