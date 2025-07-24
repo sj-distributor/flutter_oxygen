@@ -7,21 +7,21 @@ part of 'client_item.dart';
 // **************************************************************************
 
 ClientItem _$ClientItemFromJson(Map<String, dynamic> json) => ClientItem(
-      clientName: json['clientName'] as String,
-      projectName: json['projectName'] as String,
-      appName: json['appName'] as String,
-      apiUrl: json['apiUrl'] as String,
-      version: json['version'] as String,
-      stripeKey: json['stripeKey'] as String,
-      imApiKey: json['imApiKey'] as String,
-      imBaseUrl: json['imBaseUrl'] as String,
-      imWebUrl: json['imWebUrl'] as String,
-      password: json['password'] as String,
-      merchantId: json['merchantId'] as String,
-      defaultLanguage: json['defaultLanguage'] as String? ?? 'zh',
-      primaryColor: json['primaryColor'] as String? ?? '#1677FF',
-      env: json['env'] as String? ?? 'dev',
-    );
+  clientName: json['clientName'] as String,
+  projectName: json['projectName'] as String,
+  appName: json['appName'] as String,
+  apiUrl: json['apiUrl'] as String,
+  version: json['version'] as String,
+  stripeKey: json['stripeKey'] as String,
+  imApiKey: json['imApiKey'] as String,
+  imBaseUrl: json['imBaseUrl'] as String,
+  imWebUrl: json['imWebUrl'] as String,
+  password: json['password'] as String,
+  merchantId: json['merchantId'] as String,
+  defaultLanguage: json['defaultLanguage'] as String? ?? 'zh',
+  primaryColor: json['primaryColor'] as String? ?? '#1677FF',
+  env: json['env'] as String? ?? 'dev',
+);
 
 Map<String, dynamic> _$ClientItemToJson(ClientItem instance) =>
     <String, dynamic>{
