@@ -8,8 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import 'flutter_router.dart';
-import 'router_enum.dart';
 import 'router_abstract.dart';
+import 'router_enum.dart';
 
 /// 路由策略
 /// phone端、iPad端、pc端
@@ -83,6 +83,7 @@ class RouteStrategy extends IRouterAbstract {
           name: router.name,
           path: router.path,
           builder: router.builder,
+          pageBuilder: router.pageBuilder,
         );
       }
     }).toList();
