@@ -23,8 +23,12 @@ class ClientItem {
     // required this.namespace,
     required this.password,
     required this.merchantId,
+    required this.companyId,
     this.defaultLanguage = 'zh',
     this.primaryColor = '#1677FF',
+    this.membershipTermsLink = '',
+    this.privacyPolicyLink = '',
+    this.returnPolicyLink = '',
     this.env = 'dev',
   });
 
@@ -54,6 +58,9 @@ class ClientItem {
   /// 用于App证书签名的密码，全部使用该密码
   final String password;
 
+  /// 公司id
+  final String companyId;
+
   /// 商户id
   final String merchantId;
 
@@ -77,6 +84,15 @@ class ClientItem {
 
   /// im web url
   final String imWebUrl;
+
+  /// 会员条款
+  final String membershipTermsLink;
+
+  /// 隐私政策
+  final String privacyPolicyLink;
+
+  /// 退货政策
+  final String returnPolicyLink;
 
   factory ClientItem.fromJson(Map<String, dynamic> json) =>
       _$ClientItemFromJson(json);
