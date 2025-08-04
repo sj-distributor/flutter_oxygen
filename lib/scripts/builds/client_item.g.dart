@@ -18,8 +18,12 @@ ClientItem _$ClientItemFromJson(Map<String, dynamic> json) => ClientItem(
   imWebUrl: json['imWebUrl'] as String,
   password: json['password'] as String,
   merchantId: json['merchantId'] as String,
+  companyId: json['companyId'] as String,
   defaultLanguage: json['defaultLanguage'] as String? ?? 'zh',
   primaryColor: json['primaryColor'] as String? ?? '#1677FF',
+  membershipTermsLink: json['membershipTermsLink'] as String? ?? '',
+  privacyPolicyLink: json['privacyPolicyLink'] as String? ?? '',
+  returnPolicyLink: json['returnPolicyLink'] as String? ?? '',
   env: json['env'] as String? ?? 'dev',
 );
 
@@ -31,6 +35,7 @@ Map<String, dynamic> _$ClientItemToJson(ClientItem instance) =>
       'apiUrl': instance.apiUrl,
       'version': instance.version,
       'password': instance.password,
+      'companyId': instance.companyId,
       'merchantId': instance.merchantId,
       'defaultLanguage': instance.defaultLanguage,
       'primaryColor': instance.primaryColor,
@@ -39,4 +44,7 @@ Map<String, dynamic> _$ClientItemToJson(ClientItem instance) =>
       'imApiKey': instance.imApiKey,
       'imBaseUrl': instance.imBaseUrl,
       'imWebUrl': instance.imWebUrl,
+      'membershipTermsLink': instance.membershipTermsLink,
+      'privacyPolicyLink': instance.privacyPolicyLink,
+      'returnPolicyLink': instance.returnPolicyLink,
     };
