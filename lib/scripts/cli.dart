@@ -26,13 +26,15 @@ Future<void> deleteTargetDirectory() async {
 }
 
 /// 创建项目
-Future<void> createProject({
-  required String projectName,
-}) async {
+Future<void> createProject({required String projectName}) async {
   try {
     // 执行 'flutter create .' 命令
-    final result = await Process.run(
-        'flutter', ['create', '.', '--project-name', projectName]);
+    final result = await Process.run('flutter', [
+      'create',
+      '.',
+      '--project-name',
+      projectName,
+    ]);
 
     // 输出命令的执行结果
     if (result.exitCode == 0) {
@@ -47,9 +49,7 @@ Future<void> createProject({
 }
 
 /// 修改pubspec.yaml文件
-Future<bool> editPubspecFile({
-  required String projectName,
-}) async {
+Future<bool> editPubspecFile({required String projectName}) async {
   const filePath = 'pubspec.yaml';
   // 读取 pubspec.yaml 文件
   final file = File(filePath);
@@ -89,7 +89,10 @@ Future<bool> editPubspecFile({
 
 /// Info.plist
 Future<void> addNewKeyValueToPlist(
-    String filePath, String key, String value) async {
+  String filePath,
+  String key,
+  String value,
+) async {
   // 读取 plist 文件
   final file = File(filePath);
   final document = XmlDocument.parse(file.readAsStringSync());
@@ -111,7 +114,10 @@ Future<void> addNewKeyValueToPlist(
 
 /// 遍历指定目录及其子目录，并替换文件中的指定文本。
 Future<void> traverseAndReplaceText(
-    String rootDir, String targetText, String replacementText) async {
+  String rootDir,
+  String targetText,
+  String replacementText,
+) async {
   final directory = Directory(rootDir);
 
   // 如果传入的目录不存在，抛出异常
@@ -120,8 +126,10 @@ Future<void> traverseAndReplaceText(
   }
 
   // 遍历目录下的所有文件和子目录
-  await for (var entity
-      in directory.list(recursive: true, followLinks: false)) {
+  await for (var entity in directory.list(
+    recursive: true,
+    followLinks: false,
+  )) {
     if (entity is File) {
       await _replaceTextInFile(entity, targetText, replacementText);
     }
@@ -130,7 +138,10 @@ Future<void> traverseAndReplaceText(
 
 /// 在文件中查找并替换指定的文本
 Future<void> _replaceTextInFile(
-    File file, String targetText, String replacementText) async {
+  File file,
+  String targetText,
+  String replacementText,
+) async {
   try {
     // 跳过 .DS_Store 文件或其他非文本文件
     if (file.path.endsWith('.DS_Store')) {
@@ -156,6 +167,9 @@ Future<void> _replaceTextInFile(
 void main(List<String> arguments) async {
   final params = Params().get(arguments);
   final projectName = params["name"];
+  final dirs = params["dir"] != null
+      ? params["dir"]?.split(",")
+      : ["lib", "scripts", "test", "integration_test"];
   if (projectName == null) return;
 
   String newProjectName = ReCase(projectName).snakeCase;
@@ -171,15 +185,25 @@ void main(List<String> arguments) async {
 
   // macos Info.plist
   await addNewKeyValueToPlist(
-      "macos/Runner/Info.plist", "FLTEnableImpeller", "true");
+    "macos/Runner/Info.plist",
+    "FLTEnableImpeller",
+    "true",
+  );
 
   // iOS Info.plist
   await addNewKeyValueToPlist(
-      "ios/Runner/Info.plist", "FLTEnableImpeller", "true");
+    "ios/Runner/Info.plist",
+    "FLTEnableImpeller",
+    "true",
+  );
 
   // 批量替换import项目名称
-  await traverseAndReplaceText("./lib", oldProjectName, newProjectName);
-  await traverseAndReplaceText("./test", oldProjectName, newProjectName);
-  await traverseAndReplaceText(
-      "./integration_test", oldProjectName, newProjectName);
+  // 批量替换import项目名称 - 并行方式
+  if (dirs != null) {
+    await Future.wait(
+      dirs.map((dir) async {
+        return traverseAndReplaceText("./$dir", oldProjectName, newProjectName);
+      }),
+    );
+  }
 }
