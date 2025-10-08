@@ -52,3 +52,33 @@ Future<String?> updateConfig({
     return null;
   }
 }
+
+/// 只更新 config.dart 中 static String projectName 的值
+Future<void> updateProjectNameInConfig({
+  required String inputPath,
+  required String projectName,
+}) async {
+  final file = File(inputPath);
+  if (!file.existsSync()) {
+    print('File not found: $inputPath');
+    return;
+  }
+
+  String content = await file.readAsString();
+
+  // 匹配 static String projectName = "xxx";
+  final reg = RegExp(r'static\s+String\s+projectName\s*=\s*"[^"]*";');
+
+  if (!reg.hasMatch(content)) {
+    print('No projectName field found!');
+    return;
+  }
+
+  // 替换为新的内容
+  content = content.replaceAllMapped(
+    reg,
+    (match) => 'static String projectName = "$projectName";',
+  );
+
+  await file.writeAsString(content);
+}
