@@ -1,0 +1,22 @@
+{
+  "sendTimeout": "连接超时",
+  "authException": "未授权",
+  "serverException": "服务器错误",
+  "networkException": "网络错误",
+  "appException": "未知错误",
+  "loading": "加载中",
+  "retry": "重试",
+  "page": "页",
+  "model": "模型",
+  "modelName": "模型名称",
+  "type": "类型",
+  "status": "状态",
+  "action": "操作",
+  "size": "尺寸",
+  "paramsSize": "参数量",
+  "updateTime": "修改日期",
+  "homePage": "首页",
+  "modelPage": "模型管理",
+  "loginPage": "登录页",
+  "testPage": "测试页"
+}

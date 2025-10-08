@@ -6,3 +6,4 @@
 export 'router/route.dart';
 export 'theme_color/theme_color.dart';
 export 'widgets/index.dart';
+export 'core/index.dart';

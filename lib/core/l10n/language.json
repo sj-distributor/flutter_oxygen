@@ -1,0 +1,32 @@
+{
+  "sendTimeout": {
+    "zh": "连接超时",
+    "en": "Send Timeout",
+    "es": "Send Timeout",
+    "zh_TW": "连接超时"
+  },
+  "authException": {
+    "zh": "未授权",
+    "en": "Auth Exception",
+    "es": "Auth Exception",
+    "zh_TW": "未授权"
+  },
+  "serverException": {
+    "zh": "服务器错误",
+    "en": "Server Exception",
+    "es": "Server Exception",
+    "zh_TW": "服务器错误"
+  },
+  "networkException": {
+    "zh": "网络错误",
+    "en": "Network Exception",
+    "es": "Network Exception",
+    "zh_TW": "网络错误"
+  },
+  "appException": {
+    "zh": "未知错误",
+    "en": "App Exception",
+    "es": "App Exception",
+    "zh_TW": "未知错误"
+  }
+}

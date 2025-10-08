@@ -4,17 +4,29 @@
  * @Date: 2024-08-01 09:20:21
  */
 
+import 'package:json_annotation/json_annotation.dart';
+
 export 'flutter_router.dart';
 export 'router_abstract.dart';
 export 'router_enum.dart';
 export 'router_strategy.dart';
 
-class Route {
-  const Route({
-    required this.name,
-    required this.path,
-  });
+part 'route.g.dart';
 
+@JsonSerializable(explicitToJson: true)
+class Route {
+  const Route({required this.name, required this.path, this.projectName});
+
+  /// 路由名称
   final String name;
+
+  /// 路由路径
   final String path;
+
+  /// 项目名
+  final String? projectName;
+
+  factory Route.fromJson(Map<String, dynamic> json) => _$RouteFromJson(json);
+
+  Map<String, dynamic> toJson() => _$RouteToJson(this);
 }

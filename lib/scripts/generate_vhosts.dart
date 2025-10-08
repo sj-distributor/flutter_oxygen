@@ -16,9 +16,7 @@ import 'utils.dart';
 const _print = print;
 
 /// 生成vhosts文件
-void generateVHosts({
-  required Map<String, dynamic> config,
-}) {
+void generateVHosts({required Map<String, dynamic> config}) {
   // 输出路径
   Directory currentDirectory = Directory.current;
   final webBuildDir = "${currentDirectory.path}/build/web";

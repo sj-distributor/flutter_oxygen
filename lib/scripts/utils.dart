@@ -8,6 +8,14 @@ import 'dart:io';
 const _print = print;
 
 class Utils {
+  /// 将项目名转成驼峰命名，例如 rf_online → rfOnline
+  static String toCamelCase(String projectName) {
+    final parts = projectName.split(RegExp(r'[_\s]+'));
+    if (parts.isEmpty) return projectName;
+    return parts.first.toLowerCase() +
+        parts.skip(1).map((p) => p[0].toUpperCase() + p.substring(1)).join();
+  }
+
   /// 递归创建文件夹
   static String checkAndCreateDirectory(String path) {
     final directory = Directory(path);
