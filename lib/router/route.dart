@@ -15,16 +15,13 @@ part 'route.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class Route {
-  const Route({required this.name, required this.path, this.projectName});
+  const Route({required this.name, required this.path});
 
   /// 路由名称
   final String name;
 
   /// 路由路径
   final String path;
-
-  /// 项目名
-  final String? projectName;
 
   factory Route.fromJson(Map<String, dynamic> json) => _$RouteFromJson(json);
 
