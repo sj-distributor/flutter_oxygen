@@ -8,8 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-import '../scripts/utils.dart';
-
 part 'flutter_router.g.dart';
 
 @JsonSerializable(explicitToJson: true)

@@ -60,7 +60,6 @@ Future<void> updateProjectNameInConfig({
 }) async {
   final file = File(inputPath);
   if (!file.existsSync()) {
-    print('File not found: $inputPath');
     return;
   }
 

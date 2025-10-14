@@ -157,11 +157,8 @@ Future<void> _replaceTextInFile(
 
       // 将替换后的内容写回文件
       await file.writeAsString(updatedContent);
-      print('文件已更新: ${file.path}');
     }
-  } catch (e) {
-    print('处理文件时出错: ${file.path}, 错误信息: $e');
-  }
+  } catch (e) {}
 }
 
 void main(List<String> arguments) async {

@@ -1,14 +1,16 @@
 name: flutter_oxygen
 description: "A new Flutter package project."
 version: 0.0.1
-homepage:
+homepage: https://github.com/sj-distributor/flutter_oxygen
 
 environment:
-  sdk: ">=3.8.0"
+  sdk: ">=3.8.0 < 4.0.0"
   flutter: ">=3.32.5"
 
 dependencies:
   flutter:
+    sdk: flutter
+  flutter_localizations:
     sdk: flutter
   go_router: ^16.1.0
   json_annotation: ^4.9.0
@@ -22,7 +24,6 @@ dependencies:
   riverpod: ^3.0.0
   flutter_riverpod: ^3.0.0
   intl: ^0.20.2
-  flutter_localization: ^0.3.3
   shared_preferences: ^2.5.3
   flutter_smart_dialog: ^4.9.8+9
   device_info_plus: ^12.1.0
@@ -31,6 +32,7 @@ dependencies:
   window_manager: ^0.5.1
   copy_with_extension: ^9.1.0
   copy_with_extension_gen: ^9.1.0
+  web: ^1.1.1
 
 dev_dependencies:
   flutter_test:
