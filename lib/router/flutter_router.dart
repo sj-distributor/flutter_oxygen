@@ -3,7 +3,6 @@
  * @Email: maiguangyang@163.com
  * @Date: 2024-07-29 20:44:32
  */
-import 'package:copy_with_extension/copy_with_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -11,7 +10,6 @@ import 'package:json_annotation/json_annotation.dart';
 part 'flutter_router.g.dart';
 
 @JsonSerializable(explicitToJson: true)
-@CopyWith(copyWithNull: true)
 class FlutterRouter {
   /// 路由名称
   final String name;
@@ -132,17 +130,17 @@ class FlutterRouter {
 
   Map<String, dynamic> toJson() => _$FlutterRouterToJson(this);
 
-  /// 合并路由
-  static List<FlutterRouter> mergeRoutes({
-    required List<FlutterRouter> routes,
-    required String projectName,
-  }) {
-    return routes.map((route) {
-      return route.copyWith(
-        name: "$projectName.${route.name}",
-        path: "/$projectName${route.path}",
-        isDefault: false,
-      );
-    }).toList();
-  }
+  // /// 合并路由
+  // static List<FlutterRouter> mergeRoutes({
+  //   required List<FlutterRouter> routes,
+  //   required String projectName,
+  // }) {
+  //   return routes.map((route) {
+  //     return route.copyWith(
+  //       name: "$projectName.${route.name}",
+  //       path: "/$projectName${route.path}",
+  //       isDefault: false,
+  //     );
+  //   }).toList();
+  // }
 }

@@ -21,17 +21,13 @@ dependencies:
   mustache_template: ^2.0.0
   build_runner: ^2.4.15
   dio: ^5.9.0
-  riverpod: ^3.0.0
-  flutter_riverpod: ^3.0.0
   intl: ^0.20.2
   shared_preferences: ^2.5.3
   flutter_smart_dialog: ^4.9.8+9
-  device_info_plus: ^12.1.0
+  device_info_plus: ^11.5.0
   get_user_agent: ^1.1.0
   meta_seo: ^3.0.9
   window_manager: ^0.5.1
-  copy_with_extension: ^9.1.0
-  copy_with_extension_gen: ^9.1.0
   web: ^1.1.1
 
 dev_dependencies:
