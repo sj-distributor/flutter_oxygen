@@ -166,7 +166,7 @@ void main(List<String> arguments) async {
   final projectName = params["name"];
   final dirs = params["dir"] != null
       ? params["dir"]?.split(",")
-      : ["lib", "scripts", "test", "integration_test"];
+      : ["lib", "scripts", "test", "integration_test", ".vscode"];
   if (projectName == null) return;
 
   String newProjectName = ReCase(projectName).snakeCase;
