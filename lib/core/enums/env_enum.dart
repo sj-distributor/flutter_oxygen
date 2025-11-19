@@ -11,6 +11,9 @@ enum EnvEnumCore {
   /// 测试环境
   test,
 
-  /// 正式环境
+  /// 预生产环境
+  uat,
+
+  /// 生产环境
   prd,
 }
