@@ -4,8 +4,8 @@
  * @Date: 2026-01-06 09:48:00
  */
 
+import 'lru_cache.dart';
 import 'cache_service.dart';
-import 'lru_cache_service.dart';
 
 /// 持久化 LRU 缓存
 ///
@@ -57,7 +57,7 @@ class PersistentLruCache<V> {
   final bool evictFromDisk;
 
   /// 内存 LRU 缓存
-  late final LruCacheServiceCore<String, _CacheEntry<V>> _memoryCache;
+  late final LruCache<String, _CacheEntry<V>> _memoryCache;
 
   /// 缓存索引（用于持久化 keys）
   final Set<String> _keysIndex = {};
@@ -76,9 +76,7 @@ class PersistentLruCache<V> {
 
   /// 初始化：从磁盘恢复缓存数据到内存
   Future<void> init() async {
-    _memoryCache = LruCacheServiceCore<String, _CacheEntry<V>>(
-      maxSize: maxSize,
-    );
+    _memoryCache = LruCache<String, _CacheEntry<V>>(maxSize: maxSize);
 
     // 从磁盘恢复索引
     final keysJson = CacheServiceCore.getList<String>(_indexKey);
@@ -217,14 +215,26 @@ class PersistentLruCache<V> {
     }
   }
 
-  /// 清理过期数据
+  /// 清理过期数据（同时检查内存和磁盘）
   Future<void> cleanExpired() async {
     if (!hasExpiration) return;
 
     for (final key in _keysIndex.toList()) {
-      final entry = _memoryCache.get(key);
-      if (entry != null && entry.isExpired) {
-        await remove(key);
+      // 先查内存
+      var entry = _memoryCache.get(key);
+
+      // 内存没有则从磁盘加载检查
+      if (entry == null) {
+        final json = CacheServiceCore.getMap(_itemKey(key));
+        if (json != null) {
+          entry = _parseFromDisk(json);
+        }
+      }
+
+      // 过期或无效则删除
+      if (entry == null || entry.isExpired) {
+        await _removeFromDisk(key);
+        _memoryCache.remove(key);
       }
     }
   }
