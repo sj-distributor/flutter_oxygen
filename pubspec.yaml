@@ -1,6 +1,6 @@
 name: flutter_oxygen
 description: "这是oxygen组专用的一个公共包"
-version: 0.0.5
+version: 0.0.6
 homepage: https://github.com/sj-distributor/flutter_oxygen
 
 environment:

@@ -5,6 +5,6 @@
  */
 export 'cache_registry.dart';
 export 'cache_strategy.dart';
-export 'lru_cache.dart';
-export 'persistent_lru_cache.dart';
 export 'cache_service.dart';
+export 'lru_cache.dart';
+export 'persistent_cache.dart';

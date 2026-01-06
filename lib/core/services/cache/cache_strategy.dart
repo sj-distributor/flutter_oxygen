@@ -6,7 +6,7 @@
 
 import 'cache_registry.dart';
 import 'lru_cache.dart';
-import 'persistent_lru_cache.dart';
+import 'persistent_cache.dart';
 
 /// 缓存策略枚举
 enum CacheMode {
@@ -16,8 +16,8 @@ enum CacheMode {
   /// 仅持久化缓存（SharedPreferences）
   persistent,
 
-  /// 混合模式：内存 + 持久化（推荐）
-  /// - 读取：先查内存，miss 则查磁盘
+  /// 混合模式：内存 + 持久化
+  /// - 读取：先查内存，miss 则查磁盘并加载到内存
   /// - 写入：同时写入内存和磁盘
   hybrid,
 }
@@ -25,9 +25,9 @@ enum CacheMode {
 /// 统一缓存策略
 ///
 /// 根据 [CacheMode] 选择不同的缓存实现：
-/// - [CacheMode.memory]: 纯内存 LRU 缓存
-/// - [CacheMode.persistent]: 持久化缓存（带可选过期时间）
-/// - [CacheMode.hybrid]: 内存 + 持久化双层缓存
+/// - [CacheMode.memory]: 纯内存 LRU 缓存（使用 [LruCache]）
+/// - [CacheMode.persistent]: 纯磁盘缓存（使用 [PersistentCache]）
+/// - [CacheMode.hybrid]: 内存 + 磁盘组合（本类负责协调）
 ///
 /// 使用示例：
 /// ```dart
@@ -37,7 +37,7 @@ enum CacheMode {
 ///   maxSize: 100,
 /// );
 ///
-/// // 持久化缓存（带过期时间，自动注册）
+/// // 持久化缓存
 /// final persistentCache = CacheStrategy<UserEntity>(
 ///   mode: CacheMode.persistent,
 ///   cacheKey: 'user_cache',
@@ -45,24 +45,26 @@ enum CacheMode {
 ///   expiration: Duration(hours: 1),
 ///   fromJson: UserEntity.fromJson,
 ///   toJson: (e) => e.toJson(),
-///   autoRegister: true,  // 自动注册到 CacheRegistry
 /// );
 ///
-/// // App 启动时统一初始化和清理
-/// await CacheRegistry.initAll();
-/// await CacheRegistry.cleanExpiredAll();
+/// // 混合模式（推荐）
+/// final hybridCache = CacheStrategy<UserEntity>(
+///   mode: CacheMode.hybrid,
+///   cacheKey: 'user_cache',
+///   maxSize: 100,
+///   expiration: Duration(hours: 1),
+///   fromJson: UserEntity.fromJson,
+///   toJson: (e) => e.toJson(),
+/// );
 /// ```
 class CacheStrategy<V> {
-  /// 缓存模式
-  final CacheMode mode;
-
   /// 缓存 key 前缀（persistent/hybrid 模式必填）
   final String? cacheKey;
 
   /// 最大缓存数量
   final int maxSize;
 
-  /// 过期时间（可选）
+  /// 过期时间（可选，仅 persistent/hybrid 模式有效）
   final Duration? expiration;
 
   /// JSON 反序列化（persistent/hybrid 模式必填）
@@ -71,25 +73,28 @@ class CacheStrategy<V> {
   /// JSON 序列化（persistent/hybrid 模式必填）
   final Map<String, dynamic> Function(V value)? toJson;
 
+  /// 缓存模式
+  final CacheMode mode;
+
   /// 是否自动注册到 CacheRegistry
   final bool autoRegister;
 
-  /// 内存缓存实例
+  /// 内存缓存实例（memory/hybrid 模式使用）
   LruCache<String, V>? _memoryCache;
 
-  /// 持久化缓存实例
-  PersistentLruCache<V>? _persistentCache;
+  /// 持久化缓存实例（persistent/hybrid 模式使用）
+  PersistentCache<V>? _persistentCache;
 
   /// 是否已初始化
   bool _initialized = false;
 
   CacheStrategy({
-    required this.mode,
     required this.maxSize,
     this.cacheKey,
     this.expiration,
     this.fromJson,
     this.toJson,
+    this.mode = CacheMode.persistent,
     this.autoRegister = true,
   }) {
     _validateParams();
@@ -126,7 +131,7 @@ class CacheStrategy<V> {
         break;
 
       case CacheMode.persistent:
-        _persistentCache = PersistentLruCache<V>(
+        _persistentCache = PersistentCache<V>(
           cacheKey: cacheKey!,
           maxSize: maxSize,
           expiration: expiration,
@@ -136,8 +141,9 @@ class CacheStrategy<V> {
         break;
 
       case CacheMode.hybrid:
+        // hybrid 模式：独立的内存缓存 + 独立的磁盘缓存
         _memoryCache = LruCache<String, V>(maxSize: maxSize);
-        _persistentCache = PersistentLruCache<V>(
+        _persistentCache = PersistentCache<V>(
           cacheKey: cacheKey!,
           maxSize: maxSize,
           expiration: expiration,
@@ -157,7 +163,7 @@ class CacheStrategy<V> {
     if (_persistentCache != null) {
       await _persistentCache!.init();
 
-      // hybrid 模式：预加载到内存
+      // hybrid 模式：预加载磁盘数据到内存
       if (mode == CacheMode.hybrid && _memoryCache != null) {
         for (final key in _persistentCache!.keys) {
           final value = _persistentCache!.get(key);
@@ -207,6 +213,7 @@ class CacheStrategy<V> {
         break;
 
       case CacheMode.hybrid:
+        // 同时写入内存和磁盘
         _memoryCache?.put(key, value);
         await _persistentCache?.put(key, value);
         break;
@@ -283,7 +290,7 @@ class CacheStrategy<V> {
 
       case CacheMode.persistent:
       case CacheMode.hybrid:
-        return _persistentCache?.diskSize ?? 0;
+        return _persistentCache?.length ?? 0;
     }
   }
 
@@ -291,17 +298,27 @@ class CacheStrategy<V> {
   int get memorySize => _memoryCache?.length ?? 0;
 
   /// 获取磁盘缓存大小
-  int get diskSize => _persistentCache?.diskSize ?? 0;
+  int get diskSize => _persistentCache?.length ?? 0;
 
   /// 清理过期数据（仅 persistent/hybrid 模式有效）
   Future<void> cleanExpired() async {
     await _persistentCache?.cleanExpired();
+
+    // hybrid 模式：同步清理内存中的过期 key
+    if (mode == CacheMode.hybrid && _memoryCache != null) {
+      final validKeys = _persistentCache?.keys.toSet() ?? {};
+      final memoryKeys = _memoryCache!.keys.toList();
+      for (final key in memoryKeys) {
+        if (!validKeys.contains(key)) {
+          _memoryCache!.remove(key);
+        }
+      }
+    }
   }
 
   /// 手动淘汰内存缓存到指定大小
   void evictMemoryToSize(int targetSize) {
     _memoryCache?.evictToSize(targetSize);
-    _persistentCache?.evictMemoryToSize(targetSize);
   }
 
   @override
@@ -311,10 +328,10 @@ class CacheStrategy<V> {
         return 'CacheStrategy(mode: memory, size: ${_memoryCache?.length}/$maxSize)';
 
       case CacheMode.persistent:
-        return 'CacheStrategy(mode: persistent, disk: ${_persistentCache?.diskSize}/$maxSize)';
+        return 'CacheStrategy(mode: persistent, disk: ${_persistentCache?.length}/$maxSize)';
 
       case CacheMode.hybrid:
-        return 'CacheStrategy(mode: hybrid, memory: ${_memoryCache?.length}, disk: ${_persistentCache?.diskSize}/$maxSize)';
+        return 'CacheStrategy(mode: hybrid, memory: ${_memoryCache?.length}, disk: ${_persistentCache?.length}/$maxSize)';
     }
   }
 }
