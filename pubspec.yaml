@@ -1,6 +1,6 @@
 name: flutter_oxygen
 description: "这是oxygen组专用的一个公共包"
-version: 0.0.4
+version: 0.0.5
 homepage: https://github.com/sj-distributor/flutter_oxygen
 
 environment:
@@ -12,7 +12,7 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  go_router: ^16.1.0
+  go_router: ^17.0.1
   json_annotation: ^4.9.0
   recase: ^4.1.0
   yaml_edit: ^2.2.1
@@ -24,7 +24,7 @@ dependencies:
   intl: ^0.20.2
   shared_preferences: ^2.5.3
   flutter_smart_dialog: ^4.9.8+9
-  device_info_plus: ^11.5.0
+  device_info_plus: ^12.3.0
   get_user_agent: ^1.1.0
   meta_seo: ^3.0.9
   window_manager: ^0.5.1
