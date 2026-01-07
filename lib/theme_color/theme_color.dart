@@ -193,12 +193,16 @@ class ThemeColor extends ColorSwatch<int> {
     if (result > 1) {
       result = 1;
     }
+    if (result < 0) {
+      result = 0;
+    }
     return double.parse(result.toStringAsFixed(2));
   }
 
   /// convert color to hex
   static String colorToHex(Color color) {
-    final hexColorStr = '#'
+    final hexColorStr =
+        '#'
         '${color.red.toRadixString(16).padLeft(2, '0')}'
         '${color.green.toRadixString(16).padLeft(2, '0')}'
         '${color.blue.toRadixString(16).padLeft(2, '0')}';
