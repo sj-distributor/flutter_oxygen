@@ -93,18 +93,20 @@ class Utils {
     final outputDirectory = Directory(outputDir);
 
     if (!await inputDirectory.exists()) {
-      _print('copy files input directory does not exist');
+      _print('copy files input directory does not exist: $inputDir');
       return;
     }
 
-    if (!await outputDirectory.exists()) {
-      await outputDirectory.create(recursive: true);
-    }
+    await outputDirectory.create(recursive: true);
 
-    await for (var entity in inputDirectory.list(recursive: false)) {
+    await for (final entity in inputDirectory.list(recursive: true)) {
       if (entity is File) {
-        final newPath =
-            '${outputDirectory.path}/${entity.uri.pathSegments.last}';
+        final relativePath = entity.path.substring(
+          inputDirectory.path.length + 1,
+        );
+        final newPath = '${outputDirectory.path}/$relativePath';
+
+        await File(newPath).parent.create(recursive: true);
         await entity.copy(newPath);
       }
     }
