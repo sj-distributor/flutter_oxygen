@@ -5,4 +5,5 @@ login:
 	flutter pub login
 
 publish:
+	git pull
 	flutter pub publish
